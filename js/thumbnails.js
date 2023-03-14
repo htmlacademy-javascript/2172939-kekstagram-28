@@ -1,5 +1,3 @@
-import {getPictures} from './data.js';
-
 //контейнер для отрисовки нового дом
 const thumbnailContainer = document.querySelector('.pictures');
 
@@ -8,23 +6,27 @@ const thumbnailTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-//получаем массив похожих миниатюр при помощи импортируемого модуля для генерации данных
-const getSimilarThumbnails = getPictures();
+//данные передаем в шаблон и получаем одну миниатюру
+const createThumbnail = ({url, comments, likes, description}) => {
+  const thumbnail = thumbnailTemplate.cloneNode(true);
 
-//коробочка для данных
-const getSimilarThumbnailsFragment = document.createDocumentFragment();
+  thumbnail.querySelector('.picture__img').src = url;
+  thumbnail.querySelector('.picture__comments').textContent = comments.length;
+  thumbnail.querySelector('.picture__likes').textContent = likes;
+  thumbnail.querySelector('.picture__img').alt = description;
 
-//данные передаем в шаблон. для каждого элемента в массиве клонируем шаблон похожих миниатюр и отрисовываем
-getSimilarThumbnails.forEach((picture) => {
-  const newThumbnail = thumbnailTemplate.cloneNode(true);
-  newThumbnail.querySelector('.picture__img').src = picture.url;
-  newThumbnail.querySelector('.picture__comments').textContent = picture.comments.length;
-  newThumbnail.querySelector('.picture__likes').textContent = picture.likes;
-  newThumbnail.querySelector('.picture__img').alt = picture.description;
+  return thumbnail;
+};
 
-  getSimilarThumbnailsFragment.appendChild(newThumbnail);
-});
+//для каждого элемента в массиве получаем шаблон похожих миниатюр и отрисовываем. данные хранятся в кробочке fragment
+const renderThumbnails = (pictures) => {
+  const fragment = document.createDocumentFragment();
+  pictures.forEach((picture) => {
+    const thumbnail = createThumbnail(picture);
+    fragment.append(thumbnail);
+  });
 
-const renderThumbnail = () => thumbnailContainer.appendChild(getSimilarThumbnailsFragment);
+  thumbnailContainer.append(fragment);
+};
 
-export{renderThumbnail};
+export{renderThumbnails};
