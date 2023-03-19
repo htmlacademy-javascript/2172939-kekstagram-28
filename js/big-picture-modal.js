@@ -2,52 +2,68 @@ import './thumbnails.js';
 import {isEscapeKey} from './util.js';
 
 const bigPictureContainer = document.querySelector('.big-picture');
-const openBigPicture = document.querySelector('.picture');
-const closeBigPicture = document.querySelector('.big-picture__cancel');
+const cancelBigPictureButton = document.querySelector('.big-picture__cancel');
 
 //контейнер для заполнения данными комментария и сам шаблон
 const commentsList = document.querySelector('.social__comments');
-const commentTemplate = commentsList
+const commentTemplate = document.querySelector('#comment')
   .content
-  .querySelector('.social__comment'); //вместо id взят список комментариев - правильно ли это?
+  .querySelector('.social__comment');
 
+//для task2
 const commentsCount = document.querySelector('.social__comment-count');
 const commentsLoaderButton = document.querySelector('.comments-loader');
 
-
-//создаем список комментариев под фото
-const createCloneComment = ({avatar, name, message}) => {
+//создаем список комментариев под фото с данными
+const fillCloneCommentData = (comment) => {
   const cloneComment = commentTemplate.cloneNode(true);
 
-  cloneComment.querySelector('.social__picture').src = avatar;
-  cloneComment.querySelector('.social__picture').alt = name;
-  cloneComment.querySelector('.social__text').textContent = message;
+  cloneComment.querySelector('.social__picture').src = comment.avatar;
+  cloneComment.querySelector('.social__picture').alt = comment.name;
+  cloneComment.querySelector('.social__text').textContent = comment.message;
 
   return cloneComment;
 };
 
-createCloneComment();
+//аналогично с renderThumbnails
+const renderComments = (comments) => {
+  commentsList.innerHTML = '';
+
+  const fragment = document.createDocumentFragment();
+  comments.forEach((comment) => {
+    const commentElement = fillCloneCommentData(comment);
+    fragment.append(commentElement);
+  });
+
+  commentsList.append(fragment);
+};
 
 //заполнение окна данными
-const fillPictureData = (photo) => {
-  bigPictureContainer.querySelector('big-picture__img').querySelector('img').src = photo.url;
-  bigPictureContainer.querySelector('.likes-count').textContent = photo.likes;
-  bigPictureContainer.querySelector('.comments-count').textContent = photo.comments.length;
-  bigPictureContainer.querySelector('.social__caption').textContent = photo.description;
+const fillPictureData = (data) => {
+  bigPictureContainer.querySelector('big-picture__img').querySelector('img').src = data.url;
+  bigPictureContainer.querySelector('big-picture__img').querySelector('img').alt = data.description;
+  bigPictureContainer.querySelector('.likes-count').textContent = data.likes;
+  bigPictureContainer.querySelector('.comments-count').textContent = data.comments.length;
+  bigPictureContainer.querySelector('.social__caption').textContent = data.description;
 };
 
-fillPictureData();
+//закрытие модального окна с полноразмерным изображением
 
-//обработчик закрытия через Esc, чтобы передать его в addEventListener и removeEventListener
-const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeBigPicture();
-  }
+const closeBigPicture = () => {
+  bigPictureContainer.classList.add('hidden');
+
+  commentsCount.classList.remove('hidden');
+  commentsLoaderButton.classList.remove('hidden');
+
+  document.body.classList.remove('modal-open');
+
+  cancelBigPictureButton.removeEventListener('click', onCancelBigPictureButtonClick);
+  document.removeEventListener('keydown', onDocumentKeydown);
 };
 
-//открытие и закрытие модального окна с полноразмерным изображением
-openBigPicture.addEventListener('click', () => {
+//открытие модального окна с полноразмерным изображением
+
+const openBigPicture = (data) => {
   bigPictureContainer.classList.remove('hidden');
 
   commentsCount.classList.add('hidden');
@@ -55,12 +71,25 @@ openBigPicture.addEventListener('click', () => {
 
   document.body.classList.add('modal-open');
 
+  cancelBigPictureButton.addEventListener('click', onCancelBigPictureButtonClick);
   document.addEventListener('keydown', onDocumentKeydown);
-});
 
-closeBigPicture.addEventListener('click', () => {
-  bigPictureContainer.classList.add('hidden');
-  document.body.classList.remove('modal-open');
+  fillPictureData(data);
+  renderComments(data.comments);
+};
 
-  document.removeEventListener('keydown', onDocumentKeydown);
-});
+//обработчик закрытия через кнопку big-picture__cancel
+function onCancelBigPictureButtonClick(evt) {
+  evt.preventDefault();
+  closeBigPicture();
+}
+
+//обработчик закрытия через Esc
+function onDocumentKeydown (evt) {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeBigPicture();
+  }
+}
+
+export {openBigPicture};
