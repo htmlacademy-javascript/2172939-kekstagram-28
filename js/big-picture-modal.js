@@ -39,12 +39,12 @@ const renderComments = (comments) => {
 };
 
 //заполнение окна данными
-const fillPictureData = (data) => {
-  bigPictureContainer.querySelector('big-picture__img').querySelector('img').src = data.url;
-  bigPictureContainer.querySelector('big-picture__img').querySelector('img').alt = data.description;
-  bigPictureContainer.querySelector('.likes-count').textContent = data.likes;
-  bigPictureContainer.querySelector('.comments-count').textContent = data.comments.length;
-  bigPictureContainer.querySelector('.social__caption').textContent = data.description;
+const renderPictureData = ({url, description, likes, comments}) => {
+  bigPictureContainer.querySelector('big-picture__img img').src = url;
+  bigPictureContainer.querySelector('big-picture__img img').alt = description;
+  bigPictureContainer.querySelector('.likes-count').textContent = likes;
+  bigPictureContainer.querySelector('.comments-count').textContent = comments.length;
+  bigPictureContainer.querySelector('.social__caption').textContent = description;
 };
 
 //закрытие модального окна с полноразмерным изображением
@@ -74,7 +74,7 @@ const openBigPicture = (data) => {
   cancelBigPictureButton.addEventListener('click', onCancelBigPictureButtonClick);
   document.addEventListener('keydown', onDocumentKeydown);
 
-  fillPictureData(data);
+  renderPictureData(data);
   renderComments(data.comments);
 };
 
