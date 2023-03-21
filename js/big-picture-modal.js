@@ -40,8 +40,8 @@ const renderComments = (comments) => {
 
 //заполнение окна данными
 const renderPictureData = ({url, description, likes, comments}) => {
-  bigPictureContainer.querySelector('big-picture__img img').src = url;
-  bigPictureContainer.querySelector('big-picture__img img').alt = description;
+  bigPictureContainer.querySelector('.big-picture__img img').src = url;
+  bigPictureContainer.querySelector('.big-picture__img img').alt = description;
   bigPictureContainer.querySelector('.likes-count').textContent = likes;
   bigPictureContainer.querySelector('.comments-count').textContent = comments.length;
   bigPictureContainer.querySelector('.social__caption').textContent = description;
