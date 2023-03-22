@@ -29,4 +29,7 @@ const createRandomIdFromRangeGenerator = (min, max) => {
   };
 };
 
-export {getRandomInteger, getRandomArrayElement, createRandomIdFromRangeGenerator};
+//проверка нажатой клавиши Esc
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export {getRandomInteger, getRandomArrayElement, createRandomIdFromRangeGenerator, isEscapeKey};

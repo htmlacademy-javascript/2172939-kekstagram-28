@@ -7,13 +7,14 @@ const thumbnailTemplate = document.querySelector('#picture')
   .querySelector('.picture');
 
 //данные передаем в шаблон и получаем одну миниатюру
-const createThumbnail = ({url, comments, likes, description}) => {
+const createThumbnail = ({url, comments, likes, description, id}) => {
   const thumbnail = thumbnailTemplate.cloneNode(true);
 
   thumbnail.querySelector('.picture__img').src = url;
   thumbnail.querySelector('.picture__comments').textContent = comments.length;
   thumbnail.querySelector('.picture__likes').textContent = likes;
   thumbnail.querySelector('.picture__img').alt = description;
+  thumbnail.dataset.thumbnailId = id;
 
   return thumbnail;
 };
