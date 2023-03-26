@@ -28,7 +28,7 @@ const fillCloneCommentData = (comment) => {
   return cloneComment;
 };
 
-//
+//показ комментов порционно
 const renderComments = () => {
   commentsShown += COMMENTS_PORTION;
 
