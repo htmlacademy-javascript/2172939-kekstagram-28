@@ -1412,8 +1412,4 @@ main {
 .img-upload__field-wrapper--error {
   background-color: #f48181;
   color: #232321;
-  font-size: 12px;
-  margin-top: -20px;
-  z-index: 10000;
-  position: relative;
 }
