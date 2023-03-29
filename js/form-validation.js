@@ -1,9 +1,13 @@
 import {isEscapeKey} from './util.js';
+import {resetScale} from './scale-picture-in-form.js';
+import {resetEffects} from './effect-picture-in-form.js';
 
 //регулярное выражение для проверки содержания хештега
 const HASHTAG_VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
 const HASHTAG_MAX_COUNT = 5;
-const HASHTAG_ERROR_TEXT = `Нельзя указать больше ${HASHTAG_MAX_COUNT} уникальных хэш-тегов, длиной не более 20 символов`;
+const COMMENT_MAX_LENGTH = 140;
+const HASHTAG_ERROR_TEXT = `Хэш-тег должен быть валидным. Нельзя указать больше ${HASHTAG_MAX_COUNT} уникальных хэш-тегов, длиной не более 20 символов.`;
+const COMMENT_ERROR_TEXT = `Нельзя указать больше ${COMMENT_MAX_LENGTH} символов.`;
 
 const form = document.querySelector('.img-upload__form');
 const overlay = document.querySelector('.img-upload__overlay');
@@ -30,6 +34,9 @@ const openModal = () => {
 const closeModal = () => {
   form.reset();
   pristine.reset();
+
+  resetScale();
+  resetEffects();
 
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
@@ -79,6 +86,17 @@ const validateTags = (value) => {
 //валидатор для формы с хештегами. передаем поле, функцию и текст ошибки
 pristine.addValidator(hashtagField, validateTags, HASHTAG_ERROR_TEXT);
 
+//проверка комментария на валидность (для тренировки, вместо атрибута maxlength)
+
+const isValidComment = (comment) => comment.length < COMMENT_MAX_LENGTH;
+
+const validateComment = (value) => {
+  const comment = value;
+  return isValidComment(comment);
+};
+
+pristine.addValidator(commentField, validateComment, COMMENT_ERROR_TEXT);
+
 //.validate возвращает true, если форма валидна
 const onFormSubmit = (evt) => {
   evt.preventDefault();
@@ -90,5 +108,4 @@ fileField.addEventListener('change', onFileInputChange);
 
 cancelFormButton.addEventListener('click', onCancelButtonClick);
 
-//обработчик на форму при отправке
 form.addEventListener('submit', onFormSubmit);
