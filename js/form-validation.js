@@ -9,12 +9,18 @@ const COMMENT_MAX_LENGTH = 140;
 const HASHTAG_ERROR_TEXT = `Хэш-тег должен быть валидным. Нельзя указать больше ${HASHTAG_MAX_COUNT} уникальных хэш-тегов, длиной не более 20 символов.`;
 const COMMENT_ERROR_TEXT = `Нельзя указать больше ${COMMENT_MAX_LENGTH} символов.`;
 
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Публикую...'
+};
+
 const form = document.querySelector('.img-upload__form');
 const overlay = document.querySelector('.img-upload__overlay');
 const cancelFormButton = document.querySelector('.img-upload__cancel');
 const fileField = document.querySelector('.img-upload__input');
 const hashtagField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
+const submitButton = document.querySelector('.img-upload__submit');
 
 //создание экземпляра валидатора формы, в Pristine передаем объект с настройками
 const pristine = new Pristine(form, {
@@ -97,15 +103,51 @@ const validateComment = (value) => {
 
 pristine.addValidator(commentField, validateComment, COMMENT_ERROR_TEXT);
 
-//.validate возвращает true, если форма валидна
-const onFormSubmit = (evt) => {
-  evt.preventDefault();
-  pristine.validate();
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
 };
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
+
+//отправка формы
+const setOnFormSubmit = (cb) => {
+  form.addEventListener('submit', async (evt) => {
+    evt.preventDefault();
+
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      await cb(new FormData(form));
+      unblockSubmitButton();
+    }
+  });
+};
+
+// import {sendData} from './api.js';
+// import {createSuccessMessage, createErrorMessage} from './message.js';
+// const setOnFormSubmit = (onSuccess) => {
+//   form.addEventListener('submit', (evt) => {
+//     evt.preventDefault();
+
+//     const isValid = pristine.validate();
+//     if (isValid) {
+//       blockSubmitButton();
+//       sendData(new FormData(evt.target))
+//         .then(onSuccess)
+//         .then(createSuccessMessage)
+//         .catch(createErrorMessage)
+//         .finally(unblockSubmitButton);
+//     }
+//   });
+// };
 
 //событие change, тк реакция с открытием окна на выбор файла
 fileField.addEventListener('change', onFileInputChange);
 
 cancelFormButton.addEventListener('click', onCancelButtonClick);
 
-form.addEventListener('submit', onFormSubmit);
+export {setOnFormSubmit, closeModal};
