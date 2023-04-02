@@ -2,6 +2,7 @@ const SCALE_STEP = 25;
 const MIN_SCALE = 25;
 const MAX_SCALE = 100;
 const DEFAULT_SCALE = 100;
+const PERCENT_TO_FRACTION = 100;
 
 const smallerButton = document.querySelector('.scale__control--smaller');
 const biggerButton = document.querySelector('.scale__control--bigger');
@@ -10,7 +11,7 @@ const imagePreview = document.querySelector('.img-upload__preview img');
 
 //изображению добавляться стиль CSS, который с помощью трансформации scale задаёт масштаб
 const scaleImage = (value) => {
-  imagePreview.style.transform = `scale(${value / 100})`;
+  imagePreview.style.transform = `scale(${value / PERCENT_TO_FRACTION})`;
   scaleInput.value = `${value}%`;
 };
 
