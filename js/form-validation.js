@@ -1,6 +1,8 @@
 import {isEscapeKey} from './util.js';
 import {resetScale} from './scale-picture-in-form.js';
 import {resetEffects} from './effect-picture-in-form.js';
+import {sendData} from './api.js';
+import {createSuccessMessage, createErrorMessage} from './message.js';
 
 //регулярное выражение для проверки содержания хештега
 const HASHTAG_VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
@@ -113,37 +115,22 @@ const unblockSubmitButton = () => {
   submitButton.textContent = SubmitButtonText.IDLE;
 };
 
-//отправка формы
-const setOnFormSubmit = (cb) => {
-  form.addEventListener('submit', async (evt) => {
+//отправка формы на промисах
+const setOnFormSubmit = (onSuccess) => {
+  form.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     const isValid = pristine.validate();
     if (isValid) {
       blockSubmitButton();
-      await cb(new FormData(form));
-      unblockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(onSuccess)
+        .then(createSuccessMessage)
+        .catch(createErrorMessage)
+        .finally(unblockSubmitButton);
     }
   });
 };
-
-// import {sendData} from './api.js';
-// import {createSuccessMessage, createErrorMessage} from './message.js';
-// const setOnFormSubmit = (onSuccess) => {
-//   form.addEventListener('submit', (evt) => {
-//     evt.preventDefault();
-
-//     const isValid = pristine.validate();
-//     if (isValid) {
-//       blockSubmitButton();
-//       sendData(new FormData(evt.target))
-//         .then(onSuccess)
-//         .then(createSuccessMessage)
-//         .catch(createErrorMessage)
-//         .finally(unblockSubmitButton);
-//     }
-//   });
-// };
 
 //событие change, тк реакция с открытием окна на выбор файла
 fileField.addEventListener('change', onFileInputChange);
