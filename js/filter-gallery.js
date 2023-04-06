@@ -7,31 +7,22 @@ const Filter = {
 
 const filterElement = document.querySelector('.img-filters');
 let currentFilter = Filter.DEFAULT;
-let pictures = []; // непонятно
+let pictures = [];
 
 //случайная сортировка
-const sortRandomly = () => {
-  pictures
-    .slice()
-    .sort(() => Math.random() - 0.5)
-    .slice(0, PICTURES_COUNT);
-};
+const sortRandomly = () => pictures.slice().sort(() => Math.random() - 0.5).slice(0, PICTURES_COUNT);
 
 //сортировка по кол-ву комментов (обсуждаемые). в порядке убывания b-a
 const compareDiscussed = (pictureA, pictureB) => pictureB.comments.length - pictureA.comments.length;
-const sortDiscussed = () => {
-  pictures
-    .slice()
-    .sort(compareDiscussed);
-};
+const sortDiscussed = () => pictures.slice().sort(compareDiscussed);
 
 //ф-я, которая в зависимости от фильтра вызывает нужную функцию по фильтрации для текущего фильра
-const getFiltredPictures = () => { // расхождение с ретро, поэтому не понятно
+const getFiltredPictures = () => {
   switch (currentFilter) {
     case Filter.RANDOM:
-      return sortRandomly(pictures);
+      return sortRandomly();
     case Filter.DISCUSSED:
-      return sortDiscussed(pictures);
+      return sortDiscussed();
     default:
       return pictures;
   }
@@ -40,7 +31,7 @@ const getFiltredPictures = () => { // расхождение с ретро, по
 // обработчик изменение фильтров
 const setOnFilterClick = (callback) => {
   filterElement.addEventListener('click', (evt) => {
-    if (!evt.target.classList.contains('.img-filters__button')) {
+    if (!evt.target.classList.contains('img-filters__button')) {
       return;
     }
 
@@ -51,18 +42,18 @@ const setOnFilterClick = (callback) => {
 
     filterElement
       .querySelector('.img-filters__button--active')
-      .classList.remove('.img-filters__button--active');
+      .classList.remove('img-filters__button--active');
 
-    clickedButton.classList.add('.img-filters__button--active');
+    clickedButton.classList.add('img-filters__button--active');
     currentFilter = clickedButton.id;
-    callback(getFiltredPictures()); // непонятно
+    callback(getFiltredPictures());
   });
 };
 
 //активирует фильтры
 const init = (loadedPictures, callback) => {
-  filterElement.classList.remove('.img-filters--inactive');
-  pictures = [...loadedPictures]; // непонятно
+  filterElement.classList.remove('img-filters--inactive');
+  pictures = [...loadedPictures];
   setOnFilterClick(callback);
 };
 
