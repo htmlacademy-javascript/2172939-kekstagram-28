@@ -19,8 +19,14 @@ const createThumbnail = ({url, comments, likes, description, id}) => {
   return thumbnail;
 };
 
+//удаление отрисованных ранее фотографий
+const removeAllPictures = () => {
+  thumbnailContainer.querySelectorAll('.picture').forEach((element) => element.remove());
+};
+
 //для каждого элемента в массиве получаем шаблон похожих миниатюр и отрисовываем. данные хранятся в кробочке fragment
 const renderThumbnails = (pictures) => {
+  removeAllPictures();
   const fragment = document.createDocumentFragment();
   pictures.forEach((picture) => {
     const thumbnail = createThumbnail(picture);
