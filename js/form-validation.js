@@ -59,16 +59,16 @@ function onDocumentKeydown (evt) {
 }
 
 //обработчик закрытия формы редактирования через кнопку img-upload__cancel
-function onCancelButtonClick (evt) {
+const onCancelButtonClick = (evt) => {
   evt.preventDefault();
   closeModal();
-}
+};
 
 //обработчик показа формы редактирования после выбора изображения с помощью контрола загрузки файла
-function onFileInputChange (evt) {
+const onFileInputChange = (evt) => {
   evt.preventDefault();
   openModal();
-}
+};
 
 //проверка тегов на вадидность их символов, указанное кол-во тегов и уникальность. в коллекции Set уникальные значения из массива
 
