@@ -52,7 +52,7 @@ const DEFAULT_EFFECT = EFFECTS[0];
 //актуальный эфф-т, начальное значение - первый объект, индекс 0
 let chosenEffect = DEFAULT_EFFECT;
 
-const imagePreview = document.querySelector('.img-upload__preview img');
+const previewImage = document.querySelector('.img-upload__preview img');
 const effectsImage = document.querySelector('.effects');
 const sliderEffect = document.querySelector('.effect-level__slider');
 const sliderContainer = document.querySelector('.img-upload__effect-level');
@@ -89,7 +89,7 @@ const onEffectsChange = (evt) => {
     return;
   }
   chosenEffect = EFFECTS.find((effect) => effect.name === evt.target.value);
-  imagePreview.className = `effects__preview--${chosenEffect.name}`;
+  previewImage.className = `effects__preview--${chosenEffect.name}`;
   updateSlider();
 };
 
@@ -97,9 +97,9 @@ const onEffectsChange = (evt) => {
 const onSliderUpdate = () => {
   const sliderValue = sliderEffect.noUiSlider.get();
   if (isDefault()) {
-    imagePreview.style.filter = DEFAULT_EFFECT.style;
+    previewImage.style.filter = DEFAULT_EFFECT.style;
   } else {
-    imagePreview.style.filter = `${chosenEffect.style}(${sliderValue}${chosenEffect.unit})`;
+    previewImage.style.filter = `${chosenEffect.style}(${sliderValue}${chosenEffect.unit})`;
   }
   effectLevel.value = sliderValue;
 };
