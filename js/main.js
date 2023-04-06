@@ -6,7 +6,9 @@ import {showAlert} from './util.js';
 import './form-validation.js';
 import './scale-picture-in-form.js';
 import './effect-picture-in-form.js';
+import './upload-picture.js';
 
+//для 11-2 вариант с промисами
 // getData()
 //   .then((pictures) => {
 //     renderGallery(pictures);
@@ -32,3 +34,16 @@ setOnFormSubmit (async (data) => {
     createErrorMessage();
   }
 });
+
+
+// // //для 12-1 ретро
+// import {showAlert, debounce} from './util.js';
+// import {init, getFiltredPictures} from './filter-gallery.js';
+// try {
+//   const data = await getData();
+//   const debouncedRenderGallery = debounce(renderGallery);
+//   init(data, debouncedRenderGallery);
+//   renderGallery(getFiltredPictures());
+// } catch (err) {
+//   showAlert(err.message);
+// }
