@@ -1,4 +1,6 @@
 const ALERT_SHOW_TIME = 5000;
+const RERENDER_DELAY = 500;
+
 //функция, которая будет показывать сообщение с ошибкой на 5 секунд
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
@@ -22,7 +24,7 @@ const showAlert = (message) => {
 };
 
 //Функция debounce для устранения дребезга
-function debounce (callback, timeoutDelay = 500) {
+const debounce = (callback, timeoutDelay = RERENDER_DELAY) => {
   // Используем замыкания, чтобы id таймаута у нас навсегда приклеился
   // к возвращаемой функции с setTimeout, тогда мы его сможем перезаписывать
   let timeoutId;
@@ -38,7 +40,7 @@ function debounce (callback, timeoutDelay = 500) {
     // Таким образом цикл «поставить таймаут - удалить таймаут» будет выполняться,
     // пока действие совершается чаще, чем переданная задержка timeoutDelay
   };
-}
+};
 
 //функция-генератор для получения случайного числа
 
