@@ -25,7 +25,7 @@ const createErrorMessage = () => {
   const errorMessageClone = errorMessageTemplate.cloneNode(true);
   document.body.append(errorMessageClone);
 
-  document.addEventListener('keydown', onErrorMessageKeydown);
+  document.addEventListener('keydown', onErrorMessageKeydown, {capture: true});
   errorMessageClone.addEventListener('click', onErrorMessageClick);
 };
 
@@ -42,7 +42,7 @@ const closeErrorMessage = () => {
   const errorMessageContainer = document.querySelector('.error');
   errorMessageContainer.remove();
 
-  document.removeEventListener('keydown', onErrorMessageKeydown);
+  document.removeEventListener('keydown', onErrorMessageKeydown, {capture: true});
   errorMessageContainer.removeEventListener('click', onErrorMessageClick);
 };
 
@@ -56,6 +56,7 @@ function onSuccessMessageKeydown(evt) {
 function onErrorMessageKeydown(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
+    evt.stopPropagation();
     closeErrorMessage();
   }
 }

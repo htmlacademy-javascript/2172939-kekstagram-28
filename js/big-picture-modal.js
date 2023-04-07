@@ -58,6 +58,12 @@ const renderPictureData = ({url, description, likes}) => {
   bigPictureContainer.querySelector('.social__caption').textContent = description;
 };
 
+//обработчик клика по "загрузить еще"
+const onCommentsLoaderButtonClick = (evt) => {
+  evt.preventDefault();
+  renderComments();
+};
+
 //закрытие модального окна с полноразмерным изображением
 
 const closeBigPicture = () => {
@@ -104,12 +110,6 @@ function onDocumentKeydown (evt) {
     evt.preventDefault();
     closeBigPicture();
   }
-}
-
-//обработчик клика по "загрузить еще"
-function onCommentsLoaderButtonClick(evt) {
-  evt.preventDefault();
-  renderComments();
 }
 
 export {openBigPicture};

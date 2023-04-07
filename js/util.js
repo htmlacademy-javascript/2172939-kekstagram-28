@@ -1,4 +1,6 @@
 const ALERT_SHOW_TIME = 5000;
+const RERENDER_DELAY = 500;
+
 //функция, которая будет показывать сообщение с ошибкой на 5 секунд
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
@@ -21,38 +23,26 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-//функция-генератор для получения случайного числа
+//Функция debounce для устранения дребезга
+const debounce = (callback, timeoutDelay = RERENDER_DELAY) => {
+  // Используем замыкания, чтобы id таймаута у нас навсегда приклеился
+  // к возвращаемой функции с setTimeout, тогда мы его сможем перезаписывать
+  let timeoutId;
 
-const getRandomInteger = (min, max) => {
-  const lower = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
-  const upper = Math.floor(Math.max(Math.abs(min), Math.abs(max)));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-};
+  return (...rest) => {
+    // Перед каждым новым вызовом удаляем предыдущий таймаут,
+    // чтобы они не накапливались
+    clearTimeout(timeoutId);
 
-//функция с логикой по поиску случайного элемента в переданном массиве
+    // Затем устанавливаем новый таймаут с вызовом колбэка на ту же задержку
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
 
-const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
-
-//функция-генератор для получения случайных ID из диапазона, без повтора, пока не будут перебраны все числа из промежутка
-
-const createRandomIdFromRangeGenerator = (min, max) => {
-  const previousValues = [];
-
-  return function () {
-    let currentValue = getRandomInteger(min, max);
-    if (previousValues.length >= (max - min + 1)) {
-      return null;
-    }
-    while (previousValues.includes(currentValue)) {
-      currentValue = getRandomInteger(min, max);
-    }
-    previousValues.push(currentValue);
-    return currentValue;
+    // Таким образом цикл «поставить таймаут - удалить таймаут» будет выполняться,
+    // пока действие совершается чаще, чем переданная задержка timeoutDelay
   };
 };
 
 //проверка нажатой клавиши Esc
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export {getRandomInteger, getRandomArrayElement, createRandomIdFromRangeGenerator, isEscapeKey, showAlert};
+export {isEscapeKey, showAlert, debounce};
