@@ -16,7 +16,7 @@ const createSuccessMessage = () => {
   document.body.append(successMessageClone);
 
   document.addEventListener('keydown', onSuccessMessageKeydown);
-  successMessageClone.addEventListener('click', onSuccessMessageClick);
+  successMessageClone.addEventListener('click', onMessageClick);
 
   closeModal();
 };
@@ -26,7 +26,7 @@ const createErrorMessage = () => {
   document.body.append(errorMessageClone);
 
   document.addEventListener('keydown', onErrorMessageKeydown, {capture: true});
-  errorMessageClone.addEventListener('click', onErrorMessageClick);
+  errorMessageClone.addEventListener('click', onMessageClick);
 };
 
 //исчезновение сообщений об успехе и об ошибке
@@ -35,7 +35,7 @@ const closeSuccessMessage = () => {
   successMessageContainer.remove();
 
   document.removeEventListener('keydown', onSuccessMessageKeydown);
-  successMessageContainer.removeEventListener('click', onSuccessMessageClick);
+  successMessageContainer.removeEventListener('click', onMessageClick);
 };
 
 const closeErrorMessage = () => {
@@ -43,7 +43,7 @@ const closeErrorMessage = () => {
   errorMessageContainer.remove();
 
   document.removeEventListener('keydown', onErrorMessageKeydown, {capture: true});
-  errorMessageContainer.removeEventListener('click', onErrorMessageClick);
+  errorMessageContainer.removeEventListener('click', onMessageClick);
 };
 
 //обработчики закрытия через Esc
@@ -61,21 +61,14 @@ function onErrorMessageKeydown(evt) {
   }
 }
 
-//обработчики закрытия через кнопку и по клику на произвольную область экрана за пределами блока
-function onSuccessMessageClick(evt) {
+//в обработчик закрытия через кнопку и по клику на произвольную область экрана за пределами блока
+function onMessageClick(evt) {
   evt.preventDefault();
-  const successButton = document.querySelector('.success__button');
-  const successBlock = document.querySelector('.success__inner');
-  if(successButton.contains(evt.target) || !successBlock.contains(evt.target)) {
+  if(evt.target.matches ('.success') || evt.target.matches ('.success__button')) {
     closeSuccessMessage();
   }
-}
 
-function onErrorMessageClick(evt) {
-  evt.preventDefault();
-  const errorButton = document.querySelector('.error__button');
-  const errorBlock = document.querySelector('.error__inner');
-  if(errorButton.contains(evt.target) || !errorBlock.contains(evt.target)) {
+  if(evt.target.matches ('.error') || evt.target.matches ('.error__button')) {
     closeErrorMessage();
   }
 }
