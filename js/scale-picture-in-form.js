@@ -7,11 +7,11 @@ const PERCENT_TO_FRACTION = 100;
 const smallerButton = document.querySelector('.scale__control--smaller');
 const biggerButton = document.querySelector('.scale__control--bigger');
 const scaleInput = document.querySelector('.scale__control--value');
-const previewImage = document.querySelector('.img-upload__preview img');
+const previewPicture = document.querySelector('.img-upload__preview img');
 
 //изображению добавляться стиль CSS, который с помощью трансформации scale задаёт масштаб
-const scaleImage = (value) => {
-  previewImage.style.transform = `scale(${value / PERCENT_TO_FRACTION})`;
+const scalePicture = (value) => {
+  previewPicture.style.transform = `scale(${value / PERCENT_TO_FRACTION})`;
   scaleInput.value = `${value}%`;
 };
 
@@ -24,7 +24,7 @@ const onSmallerButtonClick = (evt) => {
   if (newValue < MIN_SCALE) {
     newValue = MIN_SCALE;
   }
-  scaleImage(newValue);
+  scalePicture(newValue);
 };
 
 const onBiggerButtonClick = (evt) => {
@@ -34,11 +34,11 @@ const onBiggerButtonClick = (evt) => {
   if (newValue > MAX_SCALE) {
     newValue = MAX_SCALE;
   }
-  scaleImage(newValue);
+  scalePicture(newValue);
 };
 
 //сбрасывает значение до масштаба по умолчанию
-const resetScale = () => scaleImage(DEFAULT_SCALE);
+const resetScale = () => scalePicture(DEFAULT_SCALE);
 
 smallerButton.addEventListener('click', onSmallerButtonClick);
 biggerButton.addEventListener('click', onBiggerButtonClick);

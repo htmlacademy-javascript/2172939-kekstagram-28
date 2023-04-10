@@ -5,8 +5,9 @@ const COMMENTS_PORTION = 5;
 
 const bigPictureContainer = document.querySelector('.big-picture');
 const cancelBigPictureButton = document.querySelector('.big-picture__cancel');
-const commentsCount = document.querySelector('.social__comment-count');
 const commentsLoaderButton = document.querySelector('.comments-loader');
+const commentsTotalCount = document.querySelector('.comments-count');
+const commentsShownCount = document.querySelector('.comments-count__shown');
 
 let commentsShown = 0;
 let comments = [];
@@ -41,13 +42,14 @@ const renderComments = () => {
 
   const fragment = document.createDocumentFragment();
   for (let i = 0; i < commentsShown; i++) {
-    const commentElement = fillCloneCommentData(comments[i]);
-    fragment.append(commentElement);
+    const commentAdded = fillCloneCommentData(comments[i]);
+    fragment.append(commentAdded);
   }
 
   commentsList.innerHTML = '';
   commentsList.append(fragment);
-  commentsCount.innerHTML = `${commentsShown} из <span class="comments-count">${comments.length}</span> комментариев`;
+  commentsTotalCount.textContent = comments.length;
+  commentsShownCount.textContent = commentsShown;
 };
 
 //заполнение окна данными

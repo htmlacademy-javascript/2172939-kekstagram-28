@@ -52,8 +52,8 @@ const DEFAULT_EFFECT = EFFECTS[0];
 //актуальный эфф-т, начальное значение - первый объект, индекс 0
 let chosenEffect = DEFAULT_EFFECT;
 
-const previewImage = document.querySelector('.img-upload__preview img');
-const effectsImage = document.querySelector('.effects');
+const previewPicture = document.querySelector('.img-upload__preview img');
+const effectsPicture = document.querySelector('.effects');
 const sliderEffect = document.querySelector('.effect-level__slider');
 const sliderContainer = document.querySelector('.img-upload__effect-level');
 const effectLevel = document.querySelector('.effect-level__value');
@@ -62,7 +62,6 @@ const isDefault = () => chosenEffect === DEFAULT_EFFECT;
 
 const showSlider = () => sliderContainer.classList.remove('hidden');
 
-//sliderEffect.noUiSlider.destroy() не отрабатывает
 const hideSlider = () => sliderContainer.classList.add('hidden');
 
 //метод .updateOptions() исп-ся для обновления слайдера
@@ -76,11 +75,9 @@ const updateSlider = () => {
     start: chosenEffect.max,
   });
 
-  if (isDefault()) {
-    hideSlider();
-  } else {
-    showSlider();
-  }
+  previewPicture.style.filter = isDefault()
+    ? hideSlider()
+    : showSlider();
 };
 
 //проверка на клик по с фильтрам. в массиве ищем name того фильтра, кот. выбрали с атрибутом value. перезапис.класс
@@ -89,18 +86,16 @@ const onEffectsChange = (evt) => {
     return;
   }
   chosenEffect = EFFECTS.find((effect) => effect.name === evt.target.value);
-  previewImage.className = `effects__preview--${chosenEffect.name}`;
+  previewPicture.className = `effects__preview--${chosenEffect.name}`;
   updateSlider();
 };
 
 //актуальное значение слайдера получаем с помощью метода .get()
 const onSliderUpdate = () => {
   const sliderValue = sliderEffect.noUiSlider.get();
-  if (isDefault()) {
-    previewImage.style.filter = DEFAULT_EFFECT.style;
-  } else {
-    previewImage.style.filter = `${chosenEffect.style}(${sliderValue}${chosenEffect.unit})`;
-  }
+  previewPicture.style.filter = isDefault()
+    ? DEFAULT_EFFECT.style
+    : `${chosenEffect.style}(${sliderValue}${chosenEffect.unit})`;
   effectLevel.value = sliderValue;
 };
 
@@ -122,7 +117,7 @@ noUiSlider.create(sliderEffect, {
 });
 hideSlider();
 
-effectsImage.addEventListener('change', onEffectsChange);
+effectsPicture.addEventListener('change', onEffectsChange);
 
 //слушатель события update вызывается при изменении положения слайдера
 sliderEffect.noUiSlider.on('update', onSliderUpdate);
